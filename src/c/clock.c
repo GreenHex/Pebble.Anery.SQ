@@ -53,16 +53,24 @@ static void hours_layer_update_proc( Layer *layer, GContext *ctx ) {
   GRect bounds = layer_get_bounds( layer );
   GPoint center_pt = grect_center_point( &bounds );
   
-  uint32_t hour_angle = ( TRIG_MAX_ANGLE * ( ( ( tm_time.tm_hour % 12 ) * 6 ) + ( tm_time.tm_min / 10 ) ) ) / ( 12 * 6 );  
-  draw_gpath_hands( & (GPATH_HANDS_PARAMS) { 
-    .ctx = ctx, 
-    .center_pt = center_pt, 
-    .angle = hour_angle, 
-    .gpath_hand = &HOUR_HAND_SBGE001_POINTS, 
-    .gpath_hand_highlight = &HOUR_HAND_SBGE001_POINTS_HIGHLIGHT,
-    .hand_colour = HAND_COLOUR,
-    .hand_highlight_colour = HAND_HIGHLIGHT_COLOUR,
-    .hand_outline_colour = HAND_OUTLINE_COLOUR
+  uint32_t hour_angle = ( TRIG_MAX_ANGLE * ( ( ( tm_time.tm_hour % 12 ) * 6 ) + ( tm_time.tm_min / 10 ) ) ) / ( 12 * 6 );
+  
+  GPoint hour_hand = (GPoint) {
+    .x = ( sin_lookup( hour_angle ) * HOUR_HAND_LENGTH / TRIG_MAX_RATIO ) + center_pt.x,
+    .y = ( -cos_lookup( hour_angle ) * HOUR_HAND_LENGTH / TRIG_MAX_RATIO ) + center_pt.y
+  }; 
+  
+  draw_clock_hand( & (HAND_DRAW_PARAMS) {
+    .ctx = ctx,
+    .center_pt = center_pt,
+    .from_pt = center_pt,
+    .to_pt = hour_hand,
+    .hand_width = HOUR_HAND_WIDTH,
+    .hand_colour = GColorWhite,
+    .hand_outline_colour = GColorBlack,
+    .dot_radius = HOUR_CENTER_DOT_RADIUS,
+    .dot_colour = GColorWhite,
+    .dot_outline_colour = GColorBlack
   } );
 }
 
@@ -71,15 +79,22 @@ static void minutes_layer_update_proc( Layer *layer, GContext *ctx ) {
   GPoint center_pt = grect_center_point( &bounds );
   
   uint32_t minute_angle = TRIG_MAX_ANGLE * tm_time.tm_min / 60;
-  draw_gpath_hands( & (GPATH_HANDS_PARAMS) { 
-    .ctx = ctx, 
-    .center_pt = center_pt, 
-    .angle = minute_angle, 
-    .gpath_hand = &MINUTE_HAND_SBGE001_POINTS, 
-    .gpath_hand_highlight = &MINUTE_HAND_SBGE001_POINTS_HIGHLIGHT,
-    .hand_colour = HAND_COLOUR,
-    .hand_highlight_colour = HAND_HIGHLIGHT_COLOUR,
-    .hand_outline_colour = HAND_OUTLINE_COLOUR
+  GPoint minute_hand = (GPoint) {
+    .x = ( sin_lookup( minute_angle ) * MIN_HAND_LENGTH / TRIG_MAX_RATIO ) + center_pt.x,
+    .y = ( -cos_lookup( minute_angle ) * MIN_HAND_LENGTH / TRIG_MAX_RATIO ) + center_pt.y
+  };
+  
+  draw_clock_hand( & (HAND_DRAW_PARAMS) {
+    .ctx = ctx,
+    .center_pt = center_pt,
+    .from_pt = center_pt,
+    .to_pt = minute_hand,
+    .hand_width = MIN_HAND_WIDTH,
+    .hand_colour = GColorWhite,
+    .hand_outline_colour = GColorBlack,
+    .dot_radius = MIN_CENTER_DOT_RADIUS,
+    .dot_colour = GColorWhite,
+    .dot_outline_colour = GColorBlack
   } );
 }
 
