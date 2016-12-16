@@ -9,7 +9,7 @@ static TextLayer *status_text_layer = 0;
 static void status_layer_update_proc( Layer *layer, GContext *ctx ) {
   GRect bounds = layer_get_bounds( layer );
   graphics_context_set_fill_color( ctx, GColorWhite );
-  graphics_fill_rect( ctx, bounds, CLOCK_CORNER_RADIUS, GCornersBottom );  
+  graphics_fill_rect( ctx, bounds, CLOCK_CORNER_RADIUS, GCornerNone );  
 }
 
 // #define DATE_STRING "%a, %e-%b-%Y"
@@ -22,7 +22,7 @@ static void status_text_layer_update_proc( Layer *layer, GContext *ctx ) {
   graphics_context_set_text_color( ctx, GColorBlack );
   strftime( date_str, sizeof( date_str ), DATE_STRING, &tm_time );
   graphics_draw_text( ctx, date_str, fonts_get_system_font( FONT_KEY_ROBOTO_CONDENSED_21 ), date_window_bounds,
-                     GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL );
+                     GTextOverflowModeTrailingEllipsis, GTextAlignmentLeft, NULL );
 }
 
 void status_init( Layer *parent_layer ) {
