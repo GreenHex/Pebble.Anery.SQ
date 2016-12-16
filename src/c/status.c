@@ -8,7 +8,7 @@ static TextLayer *status_text_layer = 0;
 
 static void status_layer_update_proc( Layer *layer, GContext *ctx ) {
   GRect bounds = layer_get_bounds( layer );
-  graphics_context_set_fill_color( ctx, GColorWhite );
+  graphics_context_set_fill_color( ctx, foreground_colour );
   graphics_fill_rect( ctx, bounds, CLOCK_CORNER_RADIUS, GCornerNone );  
 }
 
@@ -20,7 +20,7 @@ static void status_text_layer_update_proc( Layer *layer, GContext *ctx ) {
   GRect date_window_bounds = layer_get_bounds( layer );
   date_window_bounds.origin.x += 0;
   date_window_bounds.origin.y -= 2;
-  graphics_context_set_text_color( ctx, GColorBlack );
+  graphics_context_set_text_color( ctx, background_colour );
   strftime( date_str, sizeof( date_str ), DATE_STRING, &tm_time );
   graphics_draw_text( ctx, date_str, fonts_get_system_font( FONT_KEY_BITHAM_30_BLACK ), date_window_bounds,
                      GTextOverflowModeTrailingEllipsis, GTextAlignmentLeft, NULL );

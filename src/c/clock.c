@@ -6,18 +6,36 @@
 #include "global.h"
 #include "clock.h"
 #include "utils.h"
-#include "date.h"
 #include "battery.h"
 #include "status.h"
 
+#define NUM_PBL_64_COLOURS 64
+
+const uint32_t PBL_64_COLOURS[ NUM_PBL_64_COLOURS ] = {
+  0x000000, 0xFFFFFF, 0xAAAAAA, 0x555555, 0xFFFFAA, 0xFFFF55, 0xFFAA55, 0xFF5500,
+  0xFF0000, 0xFF0055, 0xFF5555, 0xFFAAAA, 0xFFFF00, 0xFFAA00, 0xAA5500, 0xAA5555,
+  0xAA0000, 0xFF00AA, 0xFF55AA, 0xFFAAFF, 0x550000, 0xAA0055, 0xFF00FF, 0xFF55FF,
+  0x550055, 0xAA00AA, 0xAA55AA, 0x000055, 0x5500AA, 0xAA00FF, 0xAA55FF, 0x0000AA,
+  0x5500FF, 0x5555AA, 0x0055AA, 0x55AAAA, 0x55AA55, 0x00AA00, 0x00FF00, 0x55FF00,
+  0xAAFF55, 0xAAFF00, 0x55AA00, 0x005500, 0x005555, 0xAAAA55, 0x555500, 0xAAAA00,
+  0xAAFFAA, 0x55FF55, 0x00FF55, 0x00AA55, 0x00AAAA, 0x00AAFF, 0x0000FF, 0x5555FF,
+  0xAAAAFF, 0x55FFAA, 0x00FFAA, 0x00FFFF, 0x55AAFF, 0x0055FF, 0x55FFFF, 0xAAFFFF
+};
+
 tm tm_time;
+GColor foreground_colour;
+GColor background_colour;
 
 static Layer *window_layer = 0;
 static Layer *dial_layer = 0;
 static Layer *hours_layer = 0;
 static Layer *minutes_layer = 0;
 static Layer *seconds_layer = 0;
-static bool show_seconds = ALWAYS_SHOW_SECONDS;
+#ifdef ALWAYS_SHOW_SECONDS
+static bool show_seconds = true;
+#else
+static bool show_seconds = false;
+#endif
 static AppTimer *secs_display_apptimer = 0;
 
 static uint32_t const two_segments[] = { 200, 200, 200 };
@@ -35,16 +53,30 @@ static void handle_clock_tick( struct tm *tick_time, TimeUnits units_changed ) {
   
   layer_mark_dirty( dial_layer );
   if ( units_changed & HOUR_UNIT ) vibes_enqueue_custom_pattern( double_vibe_pattern );
+  
+  #if defined( PBL_COLOR ) 
+  if ( units_changed & MINUTE_UNIT ) {
+    background_colour = GColorFromHEX( PBL_IF_COLOR_ELSE( PBL_64_COLOURS[ rand() % NUM_PBL_64_COLOURS ], 0xFFFFFF ) );
+    foreground_colour = gcolor_legible_over( background_colour );
+  }
+  #endif
+}
+
+static void window_layer_update_proc( Layer *layer, GContext *ctx ) {
+  GRect bounds = layer_get_bounds( layer );
+  graphics_context_set_antialiased( ctx, true );
+  graphics_context_set_fill_color( ctx, foreground_colour );
+  graphics_fill_rect( ctx, bounds, 0, GCornerNone );
 }
 
 static void dial_layer_update_proc( Layer *layer, GContext *ctx ) {
   GRect bounds = layer_get_bounds( layer );
   graphics_context_set_antialiased( ctx, true );
-  graphics_context_set_fill_color( ctx, BACKGROUND_COLOUR );
+  graphics_context_set_fill_color( ctx, background_colour );
   graphics_fill_rect( ctx, bounds, CLOCK_CORNER_RADIUS, GCornersAll );
-  draw_seconds_ticks( & (DRAW_TICKS_PARAMS) { layer, ctx, &PATH_TICK, 5, 1, 12, TICKS_COLOUR, BACKGROUND_COLOUR } );
-  draw_seconds_ticks( & (DRAW_TICKS_PARAMS) { layer, ctx, &PATH_TICK, 15, 3, 15, TICKS_COLOUR, BACKGROUND_COLOUR } );
-  graphics_context_set_stroke_color( ctx, BACKGROUND_COLOUR );
+  draw_seconds_ticks( & (DRAW_TICKS_PARAMS) { layer, ctx, &PATH_TICK, 5, 1, 12, foreground_colour, background_colour } );
+  draw_seconds_ticks( & (DRAW_TICKS_PARAMS) { layer, ctx, &PATH_TICK, 15, 3, 15, foreground_colour, background_colour } );
+  graphics_context_set_stroke_color( ctx, background_colour );
   graphics_context_set_stroke_width( ctx, CLOCK_TICK_EDGE_OFFSET );
   graphics_draw_round_rect( ctx, grect_inset( bounds, GEdgeInsets( CLOCK_TICK_EDGE_OFFSET / 2 ) ), CLOCK_CORNER_RADIUS );
 }
@@ -66,11 +98,11 @@ static void hours_layer_update_proc( Layer *layer, GContext *ctx ) {
     .from_pt = center_pt,
     .to_pt = hour_hand,
     .hand_width = HOUR_HAND_WIDTH,
-    .hand_colour = GColorWhite,
-    .hand_outline_colour = GColorBlack,
+    .hand_colour = foreground_colour,
+    .hand_outline_colour = background_colour,
     .dot_radius = HOUR_CENTER_DOT_RADIUS,
-    .dot_colour = GColorWhite,
-    .dot_outline_colour = GColorBlack
+    .dot_colour = foreground_colour,
+    .dot_outline_colour = background_colour
   } );
 }
 
@@ -90,11 +122,11 @@ static void minutes_layer_update_proc( Layer *layer, GContext *ctx ) {
     .from_pt = center_pt,
     .to_pt = minute_hand,
     .hand_width = MIN_HAND_WIDTH,
-    .hand_colour = GColorWhite,
-    .hand_outline_colour = GColorBlack,
+    .hand_colour = foreground_colour,
+    .hand_outline_colour = background_colour,
     .dot_radius = MIN_CENTER_DOT_RADIUS,
-    .dot_colour = GColorWhite,
-    .dot_outline_colour = GColorBlack
+    .dot_colour = foreground_colour,
+    .dot_outline_colour = background_colour
   } );
 }
 
@@ -121,11 +153,11 @@ static void seconds_layer_update_proc( Layer *layer, GContext *ctx ) {
     .from_pt = sec_hand,
     .to_pt = sec_hand_tail,
     .hand_width = SEC_HAND_WIDTH,
-    .hand_colour = COLOUR_SEC_HAND,
-    .hand_outline_colour = COLOUR_BG_BITMAP_BG,
+    .hand_colour = foreground_colour,
+    .hand_outline_colour = background_colour,
     .dot_radius = SEC_CENTER_DOT_RADIUS,
-    .dot_colour = COLOUR_SEC_HAND,
-    .dot_outline_colour = COLOUR_DOT_OUTLINE
+    .dot_colour = foreground_colour,
+    .dot_outline_colour = background_colour
   } );
   
   #if defined( PBL_COLOR )
@@ -182,12 +214,16 @@ static void unobstructed_change_proc( AnimationProgress progress, void *context 
 void clock_init( Window* window ){
   window_layer = window_get_root_layer( window );
   
+  foreground_colour = BACKGROUND_COLOUR;
+  background_colour = FOREGROUND_COLOUR;
+  
+  layer_set_update_proc( window_layer, window_layer_update_proc );
+
   dial_layer = layer_create( CLOCK_DIAL_RECT );
   layer_set_update_proc( dial_layer, dial_layer_update_proc );
   layer_add_child( window_layer, dial_layer );
   GRect dial_layer_bounds = layer_get_bounds( dial_layer ); 
   
-  // date_init( dial_layer );
   // battery_init( dial_layer );
   status_init( window_layer );
   
@@ -207,8 +243,12 @@ void clock_init( Window* window ){
   unobstructed_area_service_subscribe( (UnobstructedAreaHandlers) { .change = unobstructed_change_proc }, window_layer );
   #endif
   
+  #ifdef ALWAYS_SHOW_SECONDS
+  tick_timer_service_subscribe( SECOND_UNIT, handle_clock_tick );
+  #else
   tick_timer_service_subscribe( MINUTE_UNIT, handle_clock_tick );
   accel_tap_service_subscribe( start_seconds_display );
+  #endif
   
   time_t now = time( NULL );
   handle_clock_tick( localtime( &now ), 0 );
@@ -220,6 +260,5 @@ void clock_deinit( void ){
   if ( hours_layer ) layer_destroy( hours_layer );
   status_deinit();
   // battery_deinit();
-  // date_deinit();
   if ( dial_layer ) layer_destroy( dial_layer );
 }

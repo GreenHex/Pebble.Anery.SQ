@@ -6,11 +6,11 @@
 #include <pebble.h>
 
 // #define DEBUG
-// #define REVERSE
-#define ALWAYS_SHOW_SECONDS false
+#define REVERSE
+// #define ALWAYS_SHOW_SECONDS
 // #define ALLOW_TIMELINE_QV
 
-#define CLOCK_DIAL_SIZE_W 124
+#define CLOCK_DIAL_SIZE_W 126
 #define CLOCK_DIAL_SIZE_H ( CLOCK_DIAL_SIZE_W - 4 )
 #define CLOCK_DIAL_POS_Y ( ( PBL_DISPLAY_WIDTH - CLOCK_DIAL_SIZE_W ) / 2 )
 #define CLOCK_DIAL_POS_X CLOCK_DIAL_POS_Y
@@ -41,7 +41,7 @@
 #define MIN_HAND_LENGTH 52
 #define MIN_HAND_WIDTH 5
 #define MIN_CENTER_DOT_RADIUS ( HOUR_CENTER_DOT_RADIUS - 3 )
-#define SEC_HAND_LENGTH 58
+#define SEC_HAND_LENGTH 56
 #define SEC_HAND_TAIL_LENGTH 23
 #define SEC_HAND_TIP_LENGTH 12
 #define SEC_HAND_WIDTH 1
@@ -96,7 +96,8 @@
 
 #ifdef REVERSE
 
-#define BACKGROUND_COLOUR GColorWhite
+#define FOREGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorWhite, GColorWhite )
+#define BACKGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorBlack, GColorBlack )
 #define TICKS_COLOUR GColorBlack
 #define HAND_COLOUR GColorBlack
 #define HAND_HIGHLIGHT_COLOUR GColorDarkGray
@@ -117,6 +118,7 @@
 
 #else
 
+#define FOREGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorWhite, GColorWhite )
 #define BACKGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorBlack, GColorBlack )
 #define TICKS_COLOUR PBL_IF_COLOR_ELSE( GColorWhite, GColorWhite )
 #define HAND_COLOUR GColorLightGray
@@ -141,3 +143,5 @@
 #define SHOW_SECONDS_TIMER_TIMEOUT_MS ( 5 * 1000 )
 
 extern tm tm_time;
+extern GColor foreground_colour;
+extern GColor background_colour;
