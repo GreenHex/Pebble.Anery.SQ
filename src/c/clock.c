@@ -160,6 +160,7 @@ static void seconds_layer_update_proc( Layer *layer, GContext *ctx ) {
     .dot_outline_colour = background_colour
   } );
   
+  /*
   #if defined( PBL_COLOR )
   GPoint sec_hand_tip = (GPoint) {
     .x = ( sin_lookup( sec_angle ) * ( SEC_HAND_LENGTH - SEC_HAND_TIP_LENGTH ) / TRIG_MAX_RATIO ) + center_pt.x,
@@ -169,6 +170,7 @@ static void seconds_layer_update_proc( Layer *layer, GContext *ctx ) {
   graphics_context_set_stroke_color( ctx, COLOUR_SEC_HAND_TIP );
   graphics_draw_line( ctx, sec_hand, sec_hand_tip );
   #endif
+  */
 }
 
 static void stop_seconds_display( void* data ) { // after timer elapses
