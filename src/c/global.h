@@ -35,10 +35,10 @@
 
 #else
 
-#define HOUR_HAND_LENGTH 30
+#define HOUR_HAND_LENGTH 32
 #define HOUR_HAND_WIDTH 9
 #define HOUR_CENTER_DOT_RADIUS 10
-#define MIN_HAND_LENGTH 52
+#define MIN_HAND_LENGTH 50
 #define MIN_HAND_WIDTH 5
 #define MIN_CENTER_DOT_RADIUS ( HOUR_CENTER_DOT_RADIUS - 3 )
 #define SEC_HAND_LENGTH 56
@@ -140,7 +140,7 @@
 
 #endif
 
-#define SHOW_SECONDS_TIMER_TIMEOUT_MS ( 5 * 1000 )
+#define SHOW_SECONDS_TIMER_TIMEOUT_MS ( 10 * 1000 )
 
 extern tm tm_time;
 extern GColor foreground_colour;
