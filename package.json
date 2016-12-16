@@ -2,9 +2,9 @@
     "author": "The Resetter",
     "dependencies": {},
     "keywords": [],
-    "name": "anery",
+    "name": "anery-sq",
     "pebble": {
-        "displayName": "Anery-",
+        "displayName": "Anery-Sq",
         "enableMultiJS": true,
         "messageKeys": [],
         "projectType": "native",

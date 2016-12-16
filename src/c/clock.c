@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "date.h"
 #include "battery.h"
+#include "status.h"
 
 tm tm_time;
 
@@ -40,7 +41,7 @@ static void dial_layer_update_proc( Layer *layer, GContext *ctx ) {
   GRect bounds = layer_get_bounds( layer );
   graphics_context_set_antialiased( ctx, true );
   graphics_context_set_fill_color( ctx, BACKGROUND_COLOUR );
-  graphics_fill_rect( ctx, bounds, CLOCK_CORNER_RADIUS, GCornersAll );
+  graphics_fill_rect( ctx, bounds, CLOCK_CORNER_RADIUS, GCornersTop );
   draw_seconds_ticks( & (DRAW_TICKS_PARAMS) { layer, ctx, &PATH_TICK, 5, 1, 12, TICKS_COLOUR, BACKGROUND_COLOUR } );
   draw_seconds_ticks( & (DRAW_TICKS_PARAMS) { layer, ctx, &PATH_TICK, 15, 3, 15, TICKS_COLOUR, BACKGROUND_COLOUR } );
   graphics_context_set_stroke_color( ctx, BACKGROUND_COLOUR );
@@ -143,17 +144,20 @@ static void start_seconds_display( AccelAxisType axis, int32_t direction ) {
 
 static void unobstructed_change_proc( AnimationProgress progress, void *context ) {
   GRect uo_bounds = layer_get_unobstructed_bounds( (Layer *) context );
+  GRect bounds = layer_get_bounds( (Layer *) context );
   GRect clock_dial_rect = CLOCK_DIAL_RECT;
-  clock_dial_rect.size.h = clock_dial_rect.size.h * uo_bounds.size.h;
+  clock_dial_rect.origin = GPointZero;
+  clock_dial_rect.size.h = clock_dial_rect.size.h * uo_bounds.size.h / bounds.size.h;
+  
   layer_set_bounds( dial_layer, clock_dial_rect );
-  layer_set_bounds( hours_layer, uo_bounds );
-  layer_set_bounds( minutes_layer, uo_bounds );
-  layer_set_bounds( seconds_layer, uo_bounds );
+  layer_set_bounds( hours_layer, clock_dial_rect );
+  layer_set_bounds( minutes_layer, clock_dial_rect );
+  layer_set_bounds( seconds_layer, clock_dial_rect );
   GRect date_window_frame = DATE_WINDOW_FRAME;
-  date_window_frame.origin.y = uo_bounds.origin.y + uo_bounds.size.h/2 - date_window_frame.size.h/2;
+  date_window_frame.origin.y = clock_dial_rect.origin.y + clock_dial_rect.size.h/2 - date_window_frame.size.h/2;
   layer_set_frame( date_layer, date_window_frame );
   GRect battery_gauge_frame = BATTERY_GAUGE_FRAME;
-  battery_gauge_frame.origin.y = uo_bounds.origin.y + uo_bounds.size.h/2 - battery_gauge_frame.size.h/2;
+  battery_gauge_frame.origin.y = clock_dial_rect.origin.y + clock_dial_rect.size.h/2 - battery_gauge_frame.size.h/2;
   layer_set_frame( battery_layer, battery_gauge_frame );
   layer_mark_dirty( dial_layer );
 }
@@ -168,8 +172,9 @@ void clock_init( Window* window ){
   layer_add_child( window_layer, dial_layer );
   GRect dial_layer_bounds = layer_get_bounds( dial_layer ); 
   
-  date_init( dial_layer );
+  // date_init( dial_layer );
   battery_init( dial_layer );
+  status_init( window_layer );
   
   hours_layer = layer_create( dial_layer_bounds );
   layer_set_update_proc( hours_layer, hours_layer_update_proc );
@@ -198,7 +203,8 @@ void clock_deinit( void ){
   if ( seconds_layer ) layer_destroy( seconds_layer );
   if ( minutes_layer ) layer_destroy( minutes_layer );
   if ( hours_layer ) layer_destroy( hours_layer );
+  status_deinit();
   battery_deinit();
-  date_deinit();
+  // date_deinit();
   if ( dial_layer ) layer_destroy( dial_layer );
 }

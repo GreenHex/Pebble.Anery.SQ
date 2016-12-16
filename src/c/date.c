@@ -9,8 +9,7 @@
 #include <pebble.h>
 #include "date.h"
 
-Layer *date_layer;
-
+Layer *date_layer = 0;
 static TextLayer *date_text_layer = 0;
 
 static void date_layer_update_proc( Layer *layer, GContext *ctx ) {
@@ -65,6 +64,6 @@ void date_init( Layer *parent_layer ) {
 }
 
 void date_deinit( void ) {
-  layer_destroy( date_layer );
-  text_layer_destroy( date_text_layer );
+  if ( date_layer) layer_destroy( date_layer );
+  if( date_text_layer) text_layer_destroy( date_text_layer );
 }
