@@ -13,13 +13,13 @@ static void status_layer_update_proc( Layer *layer, GContext *ctx ) {
 }
 
 // #define DATE_STRING "%a, %e-%b-%Y"
-#define DATE_STRING "%a, %e"
+#define DATE_STRING "%a %e"
 
 static void status_text_layer_update_proc( Layer *layer, GContext *ctx ) {
   char date_str[] = "AAA, DD-MMM-YYYY";
   GRect date_window_bounds = layer_get_bounds( layer );
   date_window_bounds.origin.x += 0;
-  date_window_bounds.origin.y -= 5;
+  date_window_bounds.origin.y -= 2;
   graphics_context_set_text_color( ctx, GColorBlack );
   strftime( date_str, sizeof( date_str ), DATE_STRING, &tm_time );
   graphics_draw_text( ctx, date_str, fonts_get_system_font( FONT_KEY_BITHAM_30_BLACK ), date_window_bounds,
