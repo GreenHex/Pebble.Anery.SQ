@@ -11,10 +11,14 @@
         "resources": {
             "media": [
                 {
-                    "file": "images/Anery Icon.png",
+                    "file": "images/Anery.Minus.SQ Icon.png",
                     "menuIcon": true,
-                    "name": "APP_ICON",
-                    "targetPlatforms": null,
+                    "name": "IMAGE_ICON",
+                    "targetPlatforms": [
+                        "aplite",
+                        "basalt",
+                        "diorite"
+                    ],
                     "type": "bitmap"
                 },
                 {
@@ -42,8 +46,7 @@
         "targetPlatforms": [
             "aplite",
             "basalt",
-            "diorite",
-            "emery"
+            "diorite"
         ],
         "uuid": "f630ac9b-2b46-4013-884d-a23734186ff6",
         "watchapp": {

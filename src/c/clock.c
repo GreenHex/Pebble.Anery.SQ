@@ -173,7 +173,7 @@ void clock_init( Window* window ){
   GRect dial_layer_bounds = layer_get_bounds( dial_layer ); 
   
   // date_init( dial_layer );
-  battery_init( dial_layer );
+  // battery_init( dial_layer );
   status_init( window_layer );
   
   hours_layer = layer_create( dial_layer_bounds );
@@ -204,7 +204,7 @@ void clock_deinit( void ){
   if ( minutes_layer ) layer_destroy( minutes_layer );
   if ( hours_layer ) layer_destroy( hours_layer );
   status_deinit();
-  battery_deinit();
+  // battery_deinit();
   // date_deinit();
   if ( dial_layer ) layer_destroy( dial_layer );
 }
