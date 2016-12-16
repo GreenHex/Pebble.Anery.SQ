@@ -41,7 +41,7 @@ static void dial_layer_update_proc( Layer *layer, GContext *ctx ) {
   GRect bounds = layer_get_bounds( layer );
   graphics_context_set_antialiased( ctx, true );
   graphics_context_set_fill_color( ctx, BACKGROUND_COLOUR );
-  graphics_fill_rect( ctx, bounds, CLOCK_CORNER_RADIUS, GCornersTop );
+  graphics_fill_rect( ctx, bounds, CLOCK_CORNER_RADIUS, GCornersAll );
   draw_seconds_ticks( & (DRAW_TICKS_PARAMS) { layer, ctx, &PATH_TICK, 5, 1, 12, TICKS_COLOUR, BACKGROUND_COLOUR } );
   draw_seconds_ticks( & (DRAW_TICKS_PARAMS) { layer, ctx, &PATH_TICK, 15, 3, 15, TICKS_COLOUR, BACKGROUND_COLOUR } );
   graphics_context_set_stroke_color( ctx, BACKGROUND_COLOUR );

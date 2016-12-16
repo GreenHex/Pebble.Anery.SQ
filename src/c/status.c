@@ -8,7 +8,7 @@ static TextLayer *status_text_layer = 0;
 
 static void status_layer_update_proc( Layer *layer, GContext *ctx ) {
   GRect bounds = layer_get_bounds( layer );
-  graphics_context_set_fill_color( ctx, GColorBlack );
+  graphics_context_set_fill_color( ctx, GColorWhite );
   graphics_fill_rect( ctx, bounds, CLOCK_CORNER_RADIUS, GCornersBottom );  
 }
 
@@ -18,8 +18,8 @@ static void status_layer_update_proc( Layer *layer, GContext *ctx ) {
 static void status_text_layer_update_proc( Layer *layer, GContext *ctx ) {
   char date_str[] = "AAA, DD-MMM-YYYY";
   GRect date_window_bounds = layer_get_bounds( layer );
-  date_window_bounds.origin.y -= 2;
-  graphics_context_set_text_color( ctx, GColorWhite );
+  date_window_bounds.origin.y -= 4;
+  graphics_context_set_text_color( ctx, GColorBlack );
   strftime( date_str, sizeof( date_str ), DATE_STRING, &tm_time );
   graphics_draw_text( ctx, date_str, fonts_get_system_font( FONT_KEY_ROBOTO_CONDENSED_21 ), date_window_bounds,
                      GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL );
