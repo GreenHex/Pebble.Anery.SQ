@@ -175,12 +175,14 @@ static void seconds_layer_update_proc( Layer *layer, GContext *ctx ) {
 
 static void stop_seconds_display( void* data ) { // after timer elapses
   secs_display_apptimer = 0;
+  layer_set_hidden( battery_layer, true );
   show_seconds = false;
   tick_timer_service_subscribe( MINUTE_UNIT, handle_clock_tick );
 }
 
 static void start_seconds_display( AccelAxisType axis, int32_t direction ) {
   tick_timer_service_subscribe( SECOND_UNIT, handle_clock_tick );
+  layer_set_hidden( battery_layer, false );
   show_seconds = true;
   if ( secs_display_apptimer ) {
     app_timer_reschedule( secs_display_apptimer, SHOW_SECONDS_TIMER_TIMEOUT_MS );
@@ -226,7 +228,7 @@ void clock_init( Window* window ){
   layer_add_child( window_layer, dial_layer );
   GRect dial_layer_bounds = layer_get_bounds( dial_layer ); 
   
-  // battery_init( dial_layer );
+  battery_init( dial_layer );
   status_init( window_layer );
   
   hours_layer = layer_create( dial_layer_bounds );
@@ -261,6 +263,6 @@ void clock_deinit( void ){
   if ( minutes_layer ) layer_destroy( minutes_layer );
   if ( hours_layer ) layer_destroy( hours_layer );
   status_deinit();
-  // battery_deinit();
+  battery_deinit();
   if ( dial_layer ) layer_destroy( dial_layer );
 }
