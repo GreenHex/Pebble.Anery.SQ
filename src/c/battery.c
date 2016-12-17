@@ -6,11 +6,22 @@
 #include "battery.h"
 #include "utils.h"
 
+extern void start_seconds_display( AccelAxisType axis, int32_t direction );
+
 Layer *battery_layer = 0;
 static BatteryChargeState charge_state;
 
 static void batt_gauge_update_proc( BatteryChargeState state ) {
   charge_state = state;
+
+  if ( charge_state.is_charging ) {
+    layer_set_hidden( battery_layer, false );
+    accel_tap_service_unsubscribe();
+  } else {
+    layer_set_hidden( battery_layer, true );
+    accel_tap_service_subscribe( start_seconds_display );
+  }
+
   layer_mark_dirty( battery_layer );
 }
 

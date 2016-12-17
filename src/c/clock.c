@@ -181,7 +181,7 @@ static void stop_seconds_display( void* data ) { // after timer elapses
   tick_timer_service_subscribe( MINUTE_UNIT, handle_clock_tick );
 }
 
-static void start_seconds_display( AccelAxisType axis, int32_t direction ) {
+void start_seconds_display( AccelAxisType axis, int32_t direction ) {
   tick_timer_service_subscribe( SECOND_UNIT, handle_clock_tick );
   layer_set_hidden( battery_layer, false );
   show_seconds = true;
@@ -205,12 +205,14 @@ static void unobstructed_change_proc( AnimationProgress progress, void *context 
   layer_set_bounds( hours_layer, clock_dial_rect );
   layer_set_bounds( minutes_layer, clock_dial_rect );
   layer_set_bounds( seconds_layer, clock_dial_rect );
+  /*
   GRect date_window_frame = DATE_WINDOW_FRAME;
   date_window_frame.origin.y = clock_dial_rect.origin.y + clock_dial_rect.size.h/2 - date_window_frame.size.h/2;
   layer_set_frame( date_layer, date_window_frame );
   GRect battery_gauge_frame = BATTERY_GAUGE_FRAME;
   battery_gauge_frame.origin.y = clock_dial_rect.origin.y + clock_dial_rect.size.h/2 - battery_gauge_frame.size.h/2;
   layer_set_frame( battery_layer, battery_gauge_frame );
+  */
   layer_mark_dirty( dial_layer );
 }
 #endif

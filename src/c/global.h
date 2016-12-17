@@ -52,7 +52,7 @@
 #define FOREGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorWhite, GColorWhite )
 #define BACKGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorBlack, GColorBlack )
 
-#define SHOW_SECONDS_TIMER_TIMEOUT_MS ( 10 * 1000 )
+#define SHOW_SECONDS_TIMER_TIMEOUT_MS ( 8 * 1000 )
 
 extern tm tm_time;
 extern GColor foreground_colour;
