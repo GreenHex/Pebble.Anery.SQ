@@ -17,9 +17,7 @@ static void batt_gauge_update_proc( BatteryChargeState state ) {
 static void battery_layer_update_proc( Layer *layer, GContext *ctx ) {
   GRect bounds = layer_get_bounds( layer );
   uint32_t batt_angle = TRIG_MAX_ANGLE * charge_state.charge_percent / 100;
-  GColor batt_indicator_colour = PBL_IF_COLOR_ELSE( foreground_colour, GColorWhite );
-
-  graphics_context_set_fill_color( ctx, batt_indicator_colour );
+  graphics_context_set_fill_color( ctx, PBL_IF_COLOR_ELSE( foreground_colour, GColorBlack ) );
   graphics_fill_radial( ctx, bounds, GOvalScaleModeFitCircle, 
                        BATT_GAUGE_EXT_RADIUS - BATT_GAUGE_INT_RADIUS, 0, batt_angle );
 }

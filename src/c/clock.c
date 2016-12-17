@@ -173,6 +173,7 @@ static void seconds_layer_update_proc( Layer *layer, GContext *ctx ) {
   */
 }
 
+#ifndef ALWAYS_SHOW_SECONDS
 static void stop_seconds_display( void* data ) { // after timer elapses
   secs_display_apptimer = 0;
   layer_set_hidden( battery_layer, true );
@@ -190,9 +191,9 @@ static void start_seconds_display( AccelAxisType axis, int32_t direction ) {
     secs_display_apptimer = app_timer_register( SHOW_SECONDS_TIMER_TIMEOUT_MS, stop_seconds_display, 0 );
   }
 }
+#endif
 
 #ifdef ALLOW_TIMELINE_QV
-
 static void unobstructed_change_proc( AnimationProgress progress, void *context ) {
   GRect uo_bounds = layer_get_unobstructed_bounds( (Layer *) context );
   GRect bounds = layer_get_bounds( (Layer *) context );
@@ -212,7 +213,6 @@ static void unobstructed_change_proc( AnimationProgress progress, void *context 
   layer_set_frame( battery_layer, battery_gauge_frame );
   layer_mark_dirty( dial_layer );
 }
-
 #endif
 
 void clock_init( Window* window ){
@@ -246,9 +246,10 @@ void clock_init( Window* window ){
   #ifdef ALLOW_TIMELINE_QV
   unobstructed_area_service_subscribe( (UnobstructedAreaHandlers) { .change = unobstructed_change_proc }, window_layer );
   #endif
-  
+
   #ifdef ALWAYS_SHOW_SECONDS
   tick_timer_service_subscribe( SECOND_UNIT, handle_clock_tick );
+  layer_set_hidden( battery_layer, false );
   #else
   tick_timer_service_subscribe( MINUTE_UNIT, handle_clock_tick );
   accel_tap_service_subscribe( start_seconds_display );

@@ -6,10 +6,6 @@
 #include "utils.h"
 #include "global.h"
 
-// function is "adjusted"" for whole hours or minutes; "after" 9:00 AM or "upto" 9:00 AM.
-// "after" includes the hour, "upto" excludes the hour.
-bool is_X_in_range( int a, int b, int x ) { return ( ( b > a ) ? ( ( x >= a ) && ( x < b ) ) : ( ( x >= a ) || ( x < b ) ) ); };
-
 void log_pt( char *str, GPoint pt ) {
   #ifdef DEBUG
   APP_LOG( APP_LOG_LEVEL_INFO, "%s: ( %d, %d )", str, pt.x, pt.y );
@@ -39,34 +35,6 @@ void draw_seconds_ticks( DRAW_TICKS_PARAMS *pDTP ) {
   graphics_context_set_fill_color( pDTP->ctx, pDTP->bg_colour );
   graphics_fill_rect( pDTP->ctx, grect_inset( bounds, GEdgeInsets( pDTP->tick_length ) ), 0, GCornerNone );
   gpath_destroy( gpath );
-}
-
-void draw_gpath_hands( GPATH_HANDS_PARAMS *pGP ) {
-  GPath *gpath = gpath_create( pGP->gpath_hand );
-  GPath *gpath_highlight = gpath_create( pGP->gpath_hand_highlight );
-  
-  graphics_context_set_antialiased( pGP->ctx, true );
-
-  gpath_rotate_to( gpath, pGP->angle );
-  gpath_move_to( gpath, pGP->center_pt );
-  gpath_rotate_to( gpath_highlight, pGP->angle );
-  gpath_move_to( gpath_highlight, pGP->center_pt );
-
-  graphics_context_set_fill_color( pGP->ctx, pGP->hand_colour );
-  gpath_draw_filled( pGP->ctx, gpath );
-  
-  graphics_context_set_fill_color( pGP->ctx, pGP->hand_highlight_colour );
-  gpath_draw_filled( pGP->ctx, gpath_highlight );
-  
-  graphics_context_set_stroke_width( pGP->ctx, 1 );
-  graphics_context_set_stroke_color( pGP->ctx, pGP->hand_outline_colour );
-  gpath_draw_outline( pGP->ctx, gpath );
-  
-  graphics_context_set_fill_color( pGP->ctx, BACKGROUND_COLOUR );
-  graphics_fill_circle( pGP->ctx, pGP->center_pt, 2 );
-  
-  gpath_destroy( gpath );
-  gpath_destroy( gpath_highlight );
 }
 
 void draw_clock_hand( HAND_DRAW_PARAMS *pDP ) {
