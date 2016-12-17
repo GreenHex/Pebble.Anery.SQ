@@ -26,7 +26,6 @@ void battery_init( Layer* parent_layer ) {
   battery_layer = layer_create( BATT_GAUGE_RECT );
   layer_set_update_proc( battery_layer, battery_layer_update_proc );
   layer_add_child( parent_layer, battery_layer );
-  layer_set_hidden( battery_layer, true );
   
   batt_gauge_update_proc( battery_state_service_peek() );
   battery_state_service_subscribe( batt_gauge_update_proc );

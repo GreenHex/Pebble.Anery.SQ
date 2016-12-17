@@ -249,9 +249,9 @@ void clock_init( Window* window ){
 
   #ifdef ALWAYS_SHOW_SECONDS
   tick_timer_service_subscribe( SECOND_UNIT, handle_clock_tick );
-  layer_set_hidden( battery_layer, false );
   #else
   tick_timer_service_subscribe( MINUTE_UNIT, handle_clock_tick );
+  layer_set_hidden( battery_layer, true );
   accel_tap_service_subscribe( start_seconds_display );
   #endif
   
