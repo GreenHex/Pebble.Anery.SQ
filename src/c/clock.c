@@ -176,15 +176,15 @@ static void seconds_layer_update_proc( Layer *layer, GContext *ctx ) {
 #ifndef ALWAYS_SHOW_SECONDS
 static void stop_seconds_display( void* data ) { // after timer elapses
   secs_display_apptimer = 0;
-  layer_set_hidden( battery_layer, true );
   show_seconds = false;
+  layer_set_hidden( battery_layer, true );
   tick_timer_service_subscribe( MINUTE_UNIT, handle_clock_tick );
 }
 
 void start_seconds_display( AccelAxisType axis, int32_t direction ) {
   tick_timer_service_subscribe( SECOND_UNIT, handle_clock_tick );
-  layer_set_hidden( battery_layer, false );
   show_seconds = true;
+  layer_set_hidden( battery_layer, false );
   if ( secs_display_apptimer ) {
     app_timer_reschedule( secs_display_apptimer, SHOW_SECONDS_TIMER_TIMEOUT_MS );
   } else {
