@@ -18,6 +18,7 @@ static void batt_gauge_update_proc( BatteryChargeState state ) {
 
   if ( charge_state.is_charging ) {
     layer_set_hidden( battery_layer, false );
+    layer_mark_dirty( battery_layer );
     #ifndef ALWAYS_SHOW_SECONDS
     accel_tap_service_unsubscribe();
     #endif
@@ -27,8 +28,6 @@ static void batt_gauge_update_proc( BatteryChargeState state ) {
     accel_tap_service_subscribe( start_seconds_display );
     #endif
   }
-
-  layer_mark_dirty( battery_layer );
 }
 
 static void battery_layer_update_proc( Layer *layer, GContext *ctx ) {

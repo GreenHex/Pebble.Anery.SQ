@@ -219,6 +219,7 @@ static void unobstructed_change_proc( AnimationProgress progress, void *context 
 
 void clock_init( Window* window ){
   window_layer = window_get_root_layer( window );
+  srand( time( NULL ) );
   
   foreground_colour = BACKGROUND_COLOUR;
   background_colour = FOREGROUND_COLOUR;
@@ -261,7 +262,7 @@ void clock_init( Window* window ){
   handle_clock_tick( localtime( &now ), 0 );
 }
 
-void clock_deinit( void ){
+void clock_deinit( void ) {
   if ( seconds_layer ) layer_destroy( seconds_layer );
   if ( minutes_layer ) layer_destroy( minutes_layer );
   if ( hours_layer ) layer_destroy( hours_layer );
