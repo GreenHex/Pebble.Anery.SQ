@@ -48,7 +48,7 @@ static void handle_clock_tick( struct tm *tick_time, TimeUnits units_changed ) {
   tm_time = *tick_time; // copy to global
     
   #ifdef DEBUG
-  APP_LOG( APP_LOG_LEVEL_INFO, "clock.c: handle_clock_tick(): %d:%d:%d", tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec );
+  APP_LOG( APP_LOG_LEVEL_INFO, "clock.c: handle_clock_tick(): %02d:%02d:%02d", tm_time.tm_hour, tm_time.tm_min, tm_time.tm_sec );
   #endif
   
   layer_mark_dirty( dial_layer );
@@ -56,7 +56,7 @@ static void handle_clock_tick( struct tm *tick_time, TimeUnits units_changed ) {
   
   #if defined( PBL_COLOR ) 
   if ( units_changed & MINUTE_UNIT ) {
-    background_colour = GColorFromHEX( PBL_IF_COLOR_ELSE( PBL_64_COLOURS[ rand() % NUM_PBL_64_COLOURS ], 0xFFFFFF ) );
+    background_colour = GColorFromHEX( PBL_64_COLOURS[ rand() % NUM_PBL_64_COLOURS ] );
     foreground_colour = gcolor_legible_over( background_colour );
   }
   #endif
