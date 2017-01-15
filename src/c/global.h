@@ -47,8 +47,8 @@
 #define STATUS_TEXT_HOR_ADJ 0
 #define STATUS_TEXT_VER_ADJ 2
 
-#define FOREGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorWhite, GColorWhite )
-#define BACKGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorDukeBlue, GColorBlack )
+#define FOREGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorBlack, GColorBlack )
+#define BACKGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorWhite, GColorWhite )
 
 extern tm tm_time;
 extern GColor foreground_colour;
