@@ -73,7 +73,7 @@ static void handle_clock_tick( struct tm *tick_time, TimeUnits units_changed ) {
   #endif
   
   layer_mark_dirty( dial_layer );
-  if ( units_changed & HOUR_UNIT ) vibes_enqueue_custom_pattern( double_vibe_pattern );
+  if ( ( units_changed & HOUR_UNIT ) && ( !quiet_time_is_active() ) ) vibes_enqueue_custom_pattern( double_vibe_pattern );
   
   #ifdef RANDOMIZE_CLOCKFACE_COLOURS
   #if defined( PBL_COLOR )
