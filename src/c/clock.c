@@ -94,12 +94,13 @@ static void handle_clock_tick( struct tm *tick_time, TimeUnits units_changed ) {
   #endif
   
   if ( units_changed & MINUTE_UNIT ) {
-    /*
+    
     background_colour = GColorFromHEX( PBL_64_COLOURS[ rand() % NUM_PBL_64_COLOURS ] );
     foreground_colour = gcolor_legible_over( background_colour );
-    */
+    /*
     background_colour = PBL_BG_COLOURS[ rand() % NUM_PBL_BG_COLOURS ];
     foreground_colour = PBL_FG_COLOURS[ rand() % NUM_PBL_FG_COLOURS ];
+    */
   }
   #endif
   #endif
