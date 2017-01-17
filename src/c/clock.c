@@ -12,7 +12,6 @@
 #define NUM_PBL_64_COLOURS 64
 
 #ifdef RANDOMIZE_CLOCKFACE_COLOURS
-
 const uint32_t PBL_64_COLOURS[ NUM_PBL_64_COLOURS ] = {
   0x000000, 0xFFFFFF, 0xAAAAAA, 0x555555, 0xFFFFAA, 0xFFFF55, 0xFFAA55, 0xFF5500,
   0xFF0000, 0xFF0055, 0xFF5555, 0xFFAAAA, 0xFFFF00, 0xFFAA00, 0xAA5500, 0xAA5555,
@@ -23,24 +22,6 @@ const uint32_t PBL_64_COLOURS[ NUM_PBL_64_COLOURS ] = {
   0xAAFFAA, 0x55FF55, 0x00FF55, 0x00AA55, 0x00AAAA, 0x00AAFF, 0x0000FF, 0x5555FF,
   0xAAAAFF, 0x55FFAA, 0x00FFAA, 0x00FFFF, 0x55AAFF, 0x0055FF, 0x55FFFF, 0xAAFFFF
 };
-
-#define NUM_PBL_BG_COLOURS 20
-/*
-GColor PBL_BG_COLOURS[ NUM_PBL_BG_COLOURS ] = {
-  GColorDukeBlue, GColorOxfordBlue, GColorImperialPurple, GColorBulgarianRose, GColorCobaltBlue,
-  GColorMidnightGreen, GColorCobaltBlue, GColorDarkGreen, GColorArmyGreen, GColorJazzberryJam,
-  GColorDarkCandyAppleRed, GColorRoseVale, GColorWindsorTan, GColorIndigo, GColorDarkGray,
-  GColorLimerick, GColorRed, GColorFolly, GColorPurple, GColorBrass
-};
-*/
-#define NUM_PBL_FG_COLOURS 15
-/*
-GColor PBL_FG_COLOURS[ NUM_PBL_FG_COLOURS ] = {
-  GColorIcterine, GColorWhite, GColorLightGray, GColorRichBrilliantLavender, GColorShockingPink,
-  GColorBabyBlueEyes, GColorCeleste, GColorCadetBlue, GColorMelon, GColorLavenderIndigo,
-  GColorInchworm, GColorMintGreen, GColorSpringBud, GColorPictonBlue, GColorShockingPink
-};
-*/
 #endif
 
 tm tm_time;
@@ -65,6 +46,13 @@ VibePattern double_vibe_pattern = {
   .num_segments = ARRAY_LENGTH( two_segments ),
 };
 
+static void randomize_colours( void ) {
+  #if defined( PBL_COLOR )
+  background_colour = GColorFromHEX( PBL_64_COLOURS[ rand() % NUM_PBL_64_COLOURS ] );
+  foreground_colour = gcolor_legible_over( background_colour );
+  #endif
+}
+
 static void handle_clock_tick( struct tm *tick_time, TimeUnits units_changed ) {
   tm_time = *tick_time; // copy to global
   
@@ -75,34 +63,8 @@ static void handle_clock_tick( struct tm *tick_time, TimeUnits units_changed ) {
   layer_mark_dirty( dial_layer );
   if ( ( units_changed & HOUR_UNIT ) && ( !quiet_time_is_active() ) ) vibes_enqueue_custom_pattern( double_vibe_pattern );
   
-  #ifdef RANDOMIZE_CLOCKFACE_COLOURS
   #if defined( PBL_COLOR )
-  
-  #ifdef RANDOMIZE_CLOCKFACE_COLOURS
-  GColor PBL_BG_COLOURS[ NUM_PBL_BG_COLOURS ] = {
-    GColorDukeBlue, GColorOxfordBlue, GColorImperialPurple, GColorBulgarianRose, GColorCobaltBlue,
-    GColorMidnightGreen, GColorCobaltBlue, GColorDarkGreen, GColorArmyGreen, GColorJazzberryJam,
-    GColorDarkCandyAppleRed, GColorRoseVale, GColorWindsorTan, GColorIndigo, GColorDarkGray,
-    GColorLimerick, GColorRed, GColorFolly, GColorPurple, GColorBrass
-  };
-
-  GColor PBL_FG_COLOURS[ NUM_PBL_FG_COLOURS ] = {
-    GColorIcterine, GColorWhite, GColorLightGray, GColorRichBrilliantLavender, GColorShockingPink,
-    GColorBabyBlueEyes, GColorCeleste, GColorCadetBlue, GColorMelon, GColorLavenderIndigo,
-    GColorInchworm, GColorMintGreen, GColorSpringBud, GColorPictonBlue, GColorShockingPink
-  };
-  #endif
-  
-  if ( units_changed & MINUTE_UNIT ) {
-    
-    background_colour = GColorFromHEX( PBL_64_COLOURS[ rand() % NUM_PBL_64_COLOURS ] );
-    foreground_colour = gcolor_legible_over( background_colour );
-    /*
-    background_colour = PBL_BG_COLOURS[ rand() % NUM_PBL_BG_COLOURS ];
-    foreground_colour = PBL_FG_COLOURS[ rand() % NUM_PBL_FG_COLOURS ];
-    */
-  }
-  #endif
+  if ( units_changed & MINUTE_UNIT ) randomize_colours();
   #endif
 }
 
@@ -285,6 +247,7 @@ void clock_init( Window* window ){
   
   foreground_colour = FOREGROUND_COLOUR;
   background_colour = BACKGROUND_COLOUR;
+  randomize_colours();
   
   layer_set_update_proc( window_layer, window_layer_update_proc );
 
