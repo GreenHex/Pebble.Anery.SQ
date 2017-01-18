@@ -32,3 +32,4 @@ void log_pt( char *str, GPoint pt );
 void log_rect( char *str, GRect rect );
 void draw_seconds_ticks( DRAW_TICKS_PARAMS *pDTP );
 void draw_clock_hand( HAND_DRAW_PARAMS *pDP );
+void change_colour( GContext *ctx, Layer *layer, GPoint origin, GColor old_bg_colour, GColor new_bg_colour, GColor old_fg_colour, GColor new_fg_colour );

@@ -30,6 +30,7 @@ GColor background_colour;
 
 static Layer *window_layer = 0;
 static Layer *dial_layer = 0;
+static Layer *snooze_layer = 0;
 static Layer *hours_layer = 0;
 static Layer *minutes_layer = 0;
 static Layer *seconds_layer = 0;
@@ -73,6 +74,18 @@ static void window_layer_update_proc( Layer *layer, GContext *ctx ) {
   graphics_context_set_antialiased( ctx, true );
   graphics_context_set_fill_color( ctx, foreground_colour );
   graphics_fill_rect( ctx, bounds, 0, GCornerNone );
+}
+
+static void snooze_layer_update_proc( Layer *layer, GContext *ctx ) {
+  if ( quiet_time_is_active() ) {
+    GRect bounds = layer_get_bounds( layer );
+    graphics_context_set_compositing_mode( ctx, GCompOpSet );
+    GBitmap *snooze_bitmap = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_MOUSE );
+    graphics_draw_bitmap_in_rect( ctx, snooze_bitmap, bounds );
+    gbitmap_destroy( snooze_bitmap );
+    change_colour( ctx, layer, GPoint( CLOCK_DIAL_POS_X, CLOCK_DIAL_POS_Y ),
+                  GColorWhite, background_colour, GColorBlack, foreground_colour );
+  }
 }
 
 static void dial_layer_update_proc( Layer *layer, GContext *ctx ) {
@@ -236,6 +249,10 @@ static void unobstructed_change_proc( AnimationProgress progress, void *context 
   GRect battery_gauge_frame = BATTERY_GAUGE_FRAME;
   battery_gauge_frame.origin.y = clock_dial_rect.origin.y + clock_dial_rect.size.h/2 - battery_gauge_frame.size.h/2;
   layer_set_frame( battery_layer, battery_gauge_frame );
+  GRect snooze_layer_frame = SNOOZE_LAYER_FRAME;
+  snooze_layer_frame.origin.y = snooze_layer_frame.origin.y * uo_bounds.size.h / bounds.size.h;
+  layer_set_frame( bitmap_layer_get_layer( snooze_layer ), snooze_layer_frame );
+  layer_mark_dirty( bitmap_layer_get_layer( snooze_layer ) );
   */
   layer_mark_dirty( dial_layer );
 }
@@ -255,6 +272,10 @@ void clock_init( Window* window ){
   layer_set_update_proc( dial_layer, dial_layer_update_proc );
   layer_add_child( window_layer, dial_layer );
   GRect dial_layer_bounds = layer_get_bounds( dial_layer ); 
+  
+  snooze_layer = layer_create( SNOOZE_LAYER_FRAME );
+  layer_set_update_proc( snooze_layer , snooze_layer_update_proc );
+  layer_add_child( dial_layer, snooze_layer );
   
   battery_init( dial_layer );
   status_init( window_layer );
@@ -293,5 +314,6 @@ void clock_deinit( void ) {
   if ( hours_layer ) layer_destroy( hours_layer );
   status_deinit();
   battery_deinit();
+  if ( snooze_layer ) layer_destroy( snooze_layer );
   if ( dial_layer ) layer_destroy( dial_layer );
 }

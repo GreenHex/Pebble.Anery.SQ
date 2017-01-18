@@ -11,6 +11,16 @@
         "resources": {
             "media": [
                 {
+                    "file": "images/Mouse.png",
+                    "name": "IMAGE_MOUSE",
+                    "targetPlatforms": [
+                        "aplite",
+                        "basalt",
+                        "diorite"
+                    ],
+                    "type": "bitmap"
+                },
+                {
                     "file": "images/Anery.Minus.SQ Icon.png",
                     "menuIcon": true,
                     "name": "IMAGE_ICON",
@@ -53,5 +63,5 @@
             "watchface": true
         }
     },
-    "version": "1.6.0"
+    "version": "1.7.0"
 }

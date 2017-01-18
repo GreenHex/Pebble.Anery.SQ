@@ -62,3 +62,27 @@ void draw_clock_hand( HAND_DRAW_PARAMS *pDP ) {
   */
 }
 
+
+void change_colour( GContext *ctx, Layer *layer, GPoint origin,
+                   GColor old_bg_colour, GColor new_bg_colour,
+                   GColor old_fg_colour, GColor new_fg_colour ) {
+  #if defined( PBL_COLOR )
+  GRect frame = layer_get_frame( layer );
+  GBitmap *fb = graphics_capture_frame_buffer( ctx );
+  
+  for( int y = 0; y < frame.size.h + 1; y++ ) {
+    GBitmapDataRowInfo row = gbitmap_get_data_row_info( fb, origin.y + frame.origin.y + y - 1 );
+    
+    for ( int x = 0; x < frame.size.w + 1; x++ ) {
+      GColor pixel_colour = (GColor) { .argb = row.data[ origin.y + frame.origin.x + x ] };
+      if ( gcolor_equal( pixel_colour, old_bg_colour ) ) {
+        memset( &row.data[ origin.y + frame.origin.x + x ], new_bg_colour.argb, 1 );        
+      } else if ( gcolor_equal( pixel_colour, old_fg_colour ) ) {
+        memset( &row.data[ origin.y + frame.origin.x + x ], new_fg_colour.argb, 1 );
+      }
+    } 
+  }
+  graphics_release_frame_buffer( ctx, fb );
+  #endif
+}
+

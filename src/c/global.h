@@ -19,6 +19,8 @@
 #define CLOCK_TICK_EDGE_OFFSET 3 /* make it an odd number */
 #define CLOCK_CORNER_RADIUS 2
 
+#define SNOOZE_LAYER_FRAME ( GRect( CLOCK_DIAL_SIZE_W / 2 - 20 / 2, 21, 20, 20 ) )
+
 #define HOUR_HAND_LENGTH 32
 #define HOUR_HAND_WIDTH 11
 #define HOUR_CENTER_DOT_RADIUS 10
