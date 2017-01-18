@@ -83,8 +83,7 @@ static void snooze_layer_update_proc( Layer *layer, GContext *ctx ) {
     GBitmap *snooze_bitmap = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_MOUSE );
     graphics_draw_bitmap_in_rect( ctx, snooze_bitmap, bounds );
     gbitmap_destroy( snooze_bitmap );
-    change_colour( ctx, layer, GPoint( CLOCK_DIAL_POS_X, CLOCK_DIAL_POS_Y ),
-                  GColorWhite, background_colour, GColorBlack, foreground_colour );
+    change_colour( ctx, layer, GColorWhite, background_colour, GColorBlack, foreground_colour );
   }
 }
 
