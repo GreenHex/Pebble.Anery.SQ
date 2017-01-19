@@ -8,6 +8,7 @@
 #include "utils.h"
 #include "battery.h"
 #include "status.h"
+#include "animation.h"
 
 #define NUM_PBL_64_COLOURS 64
 
@@ -83,7 +84,7 @@ static void snooze_layer_update_proc( Layer *layer, GContext *ctx ) {
     GBitmap *snooze_bitmap = gbitmap_create_with_resource( RESOURCE_ID_IMAGE_MOUSE );
     graphics_draw_bitmap_in_rect( ctx, snooze_bitmap, bounds );
     gbitmap_destroy( snooze_bitmap );
-    change_colour( ctx, layer, GColorWhite, background_colour, GColorBlack, foreground_colour );
+    change_layer_colours( ctx, layer, GColorWhite, background_colour, GColorBlack, foreground_colour );
   }
 }
 
@@ -258,6 +259,9 @@ static void unobstructed_change_proc( AnimationProgress progress, void *context 
 #endif
 
 void clock_init( Window* window ){
+  time_t now = time( NULL ) - ( 60 * 45 );
+  tm_time = *localtime( &now );
+  
   window_layer = window_get_root_layer( window );
   srand( time( NULL ) );
   
@@ -291,20 +295,25 @@ void clock_init( Window* window ){
   layer_set_update_proc( seconds_layer, seconds_layer_update_proc );
   layer_add_child( dial_layer, seconds_layer );
   
+  start_animation( 0, 1200, AnimationCurveEaseInOut, (void *) dial_layer );
+}
+
+void implementation_teardown( Animation *animation ) {
   #ifdef ALLOW_TIMELINE_QV
   unobstructed_area_service_subscribe( (UnobstructedAreaHandlers) { .change = unobstructed_change_proc }, window_layer );
   #endif
-
-  #ifdef ALWAYS_SHOW_SECONDS
+  
+  #ifdef SHOW_SECONDS
   tick_timer_service_subscribe( SECOND_UNIT, handle_clock_tick );
   #else
   tick_timer_service_subscribe( MINUTE_UNIT, handle_clock_tick );
-  layer_set_hidden( battery_layer, true );
-  accel_tap_service_subscribe( start_seconds_display );
   #endif
+  accel_tap_service_subscribe( start_seconds_display );
   
   time_t now = time( NULL );
   handle_clock_tick( localtime( &now ), 0 );
+
+  animation_destroy( animation );
 }
 
 void clock_deinit( void ) {

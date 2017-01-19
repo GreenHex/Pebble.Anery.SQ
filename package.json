@@ -2,7 +2,7 @@
     "author": "The Resetter",
     "dependencies": {},
     "keywords": [],
-    "name": "anery-sq",
+    "name": "anery-sq-v1.8",
     "pebble": {
         "displayName": "Anery-Sq",
         "enableMultiJS": true,
@@ -63,5 +63,5 @@
             "watchface": true
         }
     },
-    "version": "1.7.0"
+    "version": "1.8.0"
 }

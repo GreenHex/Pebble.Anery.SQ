@@ -64,7 +64,7 @@ void draw_clock_hand( HAND_DRAW_PARAMS *pDP ) {
   */
 }
 
-void change_colour( GContext *ctx, Layer *layer,
+void change_layer_colours( GContext *ctx, Layer *layer,
                    GColor old_bg_colour, GColor new_bg_colour,
                    GColor old_fg_colour, GColor new_fg_colour ) {
   #if defined( PBL_COLOR )

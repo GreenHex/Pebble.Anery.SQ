@@ -15,3 +15,4 @@ static GPathInfo PATH_TICK = {
 
 void clock_init( Window* window );
 void clock_deinit( void );
+void implementation_teardown( Animation *animation );
