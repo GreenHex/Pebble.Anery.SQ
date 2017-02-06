@@ -48,12 +48,14 @@ VibePattern double_vibe_pattern = {
   .num_segments = ARRAY_LENGTH( two_segments ),
 };
 
+#ifdef RANDOMIZE_CLOCKFACE_COLOURS
 static void randomize_colours( void ) {
   #if defined( PBL_COLOR )
   background_colour = GColorFromHEX( PBL_64_COLOURS[ rand() % NUM_PBL_64_COLOURS ] );
   foreground_colour = gcolor_legible_over( background_colour );
   #endif
 }
+#endif
 
 static void handle_clock_tick( struct tm *tick_time, TimeUnits units_changed ) {
   tm_time = *tick_time; // copy to global
@@ -65,8 +67,10 @@ static void handle_clock_tick( struct tm *tick_time, TimeUnits units_changed ) {
   layer_mark_dirty( dial_layer );
   if ( ( units_changed & HOUR_UNIT ) && ( !quiet_time_is_active() ) ) vibes_enqueue_custom_pattern( double_vibe_pattern );
   
+  #ifdef RANDOMIZE_CLOCKFACE_COLOURS
   #if defined( PBL_COLOR )
   if ( units_changed & MINUTE_UNIT ) randomize_colours();
+  #endif
   #endif
 }
 
@@ -267,7 +271,9 @@ void clock_init( Window* window ){
   
   foreground_colour = FOREGROUND_COLOUR;
   background_colour = BACKGROUND_COLOUR;
+  #ifdef RANDOMIZE_CLOCKFACE_COLOURS
   randomize_colours();
+  #endif
   
   layer_set_update_proc( window_layer, window_layer_update_proc );
 
@@ -295,7 +301,7 @@ void clock_init( Window* window ){
   layer_set_update_proc( seconds_layer, seconds_layer_update_proc );
   layer_add_child( dial_layer, seconds_layer );
   
-  start_animation( 100, 1200, AnimationCurveEaseInOut, (void *) dial_layer );
+  start_animation( 50, 1200, AnimationCurveEaseInOut, (void *) dial_layer );
 }
 
 void implementation_teardown( Animation *animation ) {
