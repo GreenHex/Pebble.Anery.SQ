@@ -22,6 +22,9 @@ static void status_text_layer_update_proc( Layer *layer, GContext *ctx ) {
   date_window_bounds.origin.y -= STATUS_TEXT_VER_ADJ;
   graphics_context_set_text_color( ctx, background_colour );
   strftime( date_str, sizeof( date_str ), DATE_STRING, &tm_time );
+  if ( date_str[3] == date_str[4] ) { // remove double spaces between day and single digit date 
+    memmove( &date_str[4], &date_str[5], sizeof( date_str ) - 4 );
+  }
   graphics_draw_text( ctx, date_str, fonts_get_system_font( FONT_KEY_BITHAM_30_BLACK ), date_window_bounds,
                      GTextOverflowModeTrailingEllipsis, GTextAlignmentLeft, NULL );
 }

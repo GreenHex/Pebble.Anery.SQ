@@ -2,7 +2,7 @@
     "author": "The Resetter",
     "dependencies": {},
     "keywords": [],
-    "name": "anery-sq-v1.8",
+    "name": "anery-sq-v1.9",
     "pebble": {
         "displayName": "Anery-Sq",
         "enableMultiJS": true,
@@ -30,25 +30,6 @@
                         "diorite"
                     ],
                     "type": "bitmap"
-                },
-                {
-                    "characterRegex": "[0-9]",
-                    "file": "fonts/BioRhymeExpanded-Regular-Mod.ttf",
-                    "name": "FONT_BIORHYME_EXPANDED_REGULAR_20",
-                    "targetPlatforms": [
-                        "aplite",
-                        "basalt",
-                        "diorite",
-                        "emery"
-                    ],
-                    "type": "font"
-                },
-                {
-                    "characterRegex": "[0-9]",
-                    "file": "fonts/BioRhyme-Regular-Mod.ttf",
-                    "name": "FONT_BIORHYME_REGULAR_20",
-                    "targetPlatforms": null,
-                    "type": "font"
                 }
             ]
         },
@@ -63,5 +44,5 @@
             "watchface": true
         }
     },
-    "version": "1.8.0"
+    "version": "1.9.0"
 }

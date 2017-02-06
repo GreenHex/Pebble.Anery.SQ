@@ -68,6 +68,7 @@ void change_layer_colours( GContext *ctx, Layer *layer,
                    GColor old_bg_colour, GColor new_bg_colour,
                    GColor old_fg_colour, GColor new_fg_colour ) {
   #if defined( PBL_COLOR )
+  if ( gcolor_equal( old_bg_colour, GColorWhite ) ) return;
   GRect frame = layer_get_frame( layer );
   GPoint origin = layer_convert_point_to_screen( layer, GPointZero );
   GBitmap *fb = graphics_capture_frame_buffer( ctx );
