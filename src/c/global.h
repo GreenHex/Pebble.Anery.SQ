@@ -9,7 +9,7 @@
 // #define ALWAYS_SHOW_SECONDS
 // #define ALLOW_TIMELINE_QV
 #define SHOW_SECONDS_TIMER_TIMEOUT_MS ( 8 * 1000 )
-#define RANDOMIZE_CLOCKFACE_COLOURS
+// #define RANDOMIZE_CLOCKFACE_COLOURS
 
 #define CLOCK_DIAL_SIZE_W 124 /* 126 */
 #define CLOCK_DIAL_SIZE_H ( CLOCK_DIAL_SIZE_W - 4 ) /* 118 */
@@ -49,8 +49,10 @@
 #define STATUS_TEXT_HOR_ADJ 0
 #define STATUS_TEXT_VER_ADJ 2
 
-#define FOREGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorBlack, GColorBlack )
-#define BACKGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorWhite, GColorWhite )
+// #define FOREGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorBlack, GColorBlack )
+// #define BACKGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorWhite, GColorWhite )
+#define FOREGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorWhite, GColorWhite )
+#define BACKGROUND_COLOUR PBL_IF_COLOR_ELSE( GColorBlue, GColorBlack )
 
 extern tm tm_time;
 extern GColor foreground_colour;

@@ -172,8 +172,6 @@ static void minutes_layer_update_proc( Layer *layer, GContext *ctx ) {
 }
 
 static void seconds_layer_update_proc( Layer *layer, GContext *ctx ) {
-  if ( !show_seconds ) return;
-  
   GRect bounds = layer_get_bounds( layer );
   GPoint center_pt = grect_center_point( &bounds );
   
@@ -219,12 +217,14 @@ static void stop_seconds_display( void* data ) { // after timer elapses
   secs_display_apptimer = 0;
   show_seconds = false;
   layer_set_hidden( battery_layer, true );
+  layer_set_hidden( seconds_layer, true );
   tick_timer_service_subscribe( MINUTE_UNIT, handle_clock_tick );
 }
 
 void start_seconds_display( AccelAxisType axis, int32_t direction ) {
   tick_timer_service_subscribe( SECOND_UNIT, handle_clock_tick );
   show_seconds = true;
+  layer_set_hidden( seconds_layer, false );
   layer_set_hidden( battery_layer, false );
   if ( secs_display_apptimer ) {
     app_timer_reschedule( secs_display_apptimer, SHOW_SECONDS_TIMER_TIMEOUT_MS );

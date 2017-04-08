@@ -20,7 +20,7 @@ static void status_text_layer_update_proc( Layer *layer, GContext *ctx ) {
   GRect date_window_bounds = layer_get_bounds( layer );
   date_window_bounds.origin.x += STATUS_TEXT_HOR_ADJ;
   date_window_bounds.origin.y -= STATUS_TEXT_VER_ADJ;
-  graphics_context_set_text_color( ctx, background_colour );
+  graphics_context_set_text_color( ctx, GColorArmyGreen /* background_colour */ );
   strftime( date_str, sizeof( date_str ), DATE_STRING, &tm_time );
   if ( date_str[3] == date_str[4] ) { // remove double spaces between day and single digit date 
     memmove( &date_str[4], &date_str[5], sizeof( date_str ) - 4 );
