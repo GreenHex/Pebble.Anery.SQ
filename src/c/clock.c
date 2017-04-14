@@ -300,6 +300,7 @@ void clock_init( Window* window ){
   seconds_layer = layer_create( dial_layer_bounds );
   layer_set_update_proc( seconds_layer, seconds_layer_update_proc );
   layer_add_child( dial_layer, seconds_layer );
+  layer_set_hidden( seconds_layer, true );
   
   start_animation( 50, 1200, AnimationCurveEaseInOut, (void *) dial_layer );
 }
